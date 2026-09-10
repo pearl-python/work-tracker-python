@@ -65,11 +65,13 @@ def done_total(works):
 
 def longest_done_time(works):
     longest = 0
+    longest_name = None
     for work in works:
         if work.is_done():
             if longest < work.time:
                 longest = work.time
-    return longest
+                longest_name = work.name
+    return longest,longest_name
 
 works ,has_error,error_detailes = load_works()
 
@@ -80,8 +82,10 @@ if has_error:
         print(f"エラー詳細：{error_detail['detail']}")
         print(f"エラーデータ：{error_detail['row']}")
 else:
-    print(f"done件数{done_count(works)}")
-    print(f"done合計時間{done_total(works)}")
-    print(f"done最長時間{longest_done_time(works)}")
+    longest,longest_name = longest_done_time(works)
+    print(f"done件数:{done_count(works)}")
+    print(f"done合計時間:{done_total(works)}")
+    print(f"done最長時間:{longest}")
+    print(f"done最長タスク:{longest_name}")
     
     
