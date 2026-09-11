@@ -12,14 +12,14 @@ class Work:
         else:
             return False
 
-def load_works():
+def load_works(file_path):
     works = []
     has_error = False
     count = 0
     error_count = []
 
     try:
-        with open("work.csv","r",newline="",encoding="utf-8") as file:
+        with open(file_path,"r",newline="",encoding="utf-8") as file:
             reader = csv.reader(file)
             
             for row in reader:
@@ -73,19 +73,17 @@ def longest_done_time(works):
                 longest_name = work.name
     return longest,longest_name
 
-works ,has_error,error_detailes = load_works()
-
-if has_error:
-    print("データに不具合があったため中断します")
-    for error_detail in error_detailes:
-        print(f"エラー行：{error_detail['gyo']}")
-        print(f"エラー詳細：{error_detail['detail']}")
-        print(f"エラーデータ：{error_detail['row']}")
-else:
-    longest,longest_name = longest_done_time(works)
-    print(f"done件数:{done_count(works)}")
-    print(f"done合計時間:{done_total(works)}")
-    print(f"done最長時間:{longest}")
-    print(f"done最長タスク:{longest_name}")
-    
-    
+if __name__ == "__main__":
+    works ,has_error,error_detailes = load_works("sample/works.csv")
+    if has_error:
+        print("データに不具合があったため中断します")
+        for error_detail in error_detailes:
+            print(f"エラー行：{error_detail['gyo']}")
+            print(f"エラー詳細：{error_detail['detail']}")
+            print(f"エラーデータ：{error_detail['row']}")
+    else:
+        longest,longest_name = longest_done_time(works)
+        print(f"done件数:{done_count(works)}")
+        print(f"done合計時間:{done_total(works)}")
+        print(f"done最長時間:{longest}")
+        print(f"done最長タスク:{longest_name}")
