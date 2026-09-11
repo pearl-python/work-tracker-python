@@ -2,7 +2,7 @@
 
 CSV形式の作業データを読み込み、完了した作業の件数・合計時間・最長作業を集計するPython製の小型CLIツールです。
 
-Pythonのクラス、CSV処理、関数分割、例外処理を組み合わせた実践学習として制作しました。
+Pythonのクラス、CSV処理、関数分割、例外処理、自動テストを組み合わせた実践学習として制作しました。
 
 ## 主な機能
 
@@ -13,6 +13,7 @@ Pythonのクラス、CSV処理、関数分割、例外処理を組み合わせ�
 * 最も時間の長い完了作業を取得する
 * 不正なCSVデータを検出する
 * 不正データが含まれている場合、不完全な集計結果を正常結果として表示しない
+* `pytest`による自動テスト
 
 ## CSV形式
 
@@ -40,32 +41,47 @@ done
 doing
 ```
 
-## 実行方法
-
-`work.csv`を`main.py`と同じ場所に配置します。
+## プロジェクト構成
 
 ```text
 work-tracker-python/
 ├─ main.py
-├─ work.csv
+├─ sample/
+│  ├─ works.csv
+│  ├─ works_invalid.csv
+│  ├─ works_empty.csv
+│  └─ works_no_done.csv
+├─ tests/
+│  └─ test_main.py
 ├─ README.md
-└─ README_ja.md
+├─ README_ja.md
+└─ .gitignore
 ```
 
-その後、以下を実行します。
+## 実行方法
+
+現在の`main.py`では、同梱している以下のサンプルCSVを読み込みます。
+
+```text
+sample/works.csv
+```
+
+プロジェクトのルートディレクトリで、以下を実行します。
 
 ```bash
 python main.py
 ```
 
-## 出力例
+出力例：
 
 ```text
-done件数：3
-done合計時間：135
-done最長作業：Python Learning
-done最長時間：60
+done件数:3
+done合計時間:135
+done最長時間:60
+done最長タスク:Python Learning
 ```
+
+`load_works(file_path)`にCSVファイルのパスを渡す設計なので、別のCSVファイルにも同じ読み込み処理を再利用できます。
 
 ## テスト方法
 
@@ -93,7 +109,6 @@ python -m pytest
 * `done`状態の作業が0件の場合を処理できること
 
 現在のテストはすべて正常に通ることを確認しています。
-
 
 ## エラー処理
 
@@ -128,11 +143,15 @@ CSV
 for
 if
 関数
+引数
 try / except
 FileNotFoundError
 ValueError
 IndexError
 複数戻り値
+if __name__ == "__main__"
+pytest
+assert
 ```
 
 ## 設計上のポイント
@@ -154,14 +173,16 @@ work.is_done()
 
 そのため、不正データを検出した場合はエラー情報を残し、最終集計を中断する設計にしています。
 
+さらに、`load_works(file_path)`のようにファイルパスを引数で受け取る形にし、`if __name__ == "__main__":`で実行処理を分離することで、pytestから各関数をimportしてテストしやすい構造にしています。
+
 ## 今後追加したい機能
 
-今後は以下のような改修を予定しています。
+今後は以下のような改修が考えられます。
 
 * コマンドライン引数からCSVファイルを指定
 * 集計結果をCSVやJSONへ保存
 * loggingによるログ出力
-* 自動テストの追加
+* GitHub Actionsによる自動テスト
 * pandasを利用した集計処理
 * 処理のモジュール分割
 
@@ -172,6 +193,7 @@ work.is_done()
 * 処理を小さな関数へ分解する
 * クラスを使ってデータを整理する
 * 入力データの異常を考える
+* テストで期待する動作を確認する
 * 後から改修しやすい構造にする
 
 といった、小規模なPythonツール開発の基礎を身につけることを目的としています。
