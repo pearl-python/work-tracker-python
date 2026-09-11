@@ -62,6 +62,34 @@ done longest task: Python Learning
 done longest time: 60
 ```
 
+## Testing
+
+This project uses `pytest` for automated testing.
+
+Install pytest if necessary:
+
+```bash
+python -m pip install pytest
+```
+
+Run the test suite from the project root:
+
+```bash
+python -m pytest
+```
+
+The current test suite covers:
+
+* Valid CSV input
+* Invalid integer values
+* Missing CSV columns
+* Missing CSV files
+* Empty CSV files
+* Cases where no tasks have `done` status
+
+All current tests are expected to pass successfully.
+
+
 ## Error Handling
 
 The program detects several common CSV errors.
